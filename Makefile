@@ -16,10 +16,16 @@ confirm:
 build/api:
 	@echo 'Building cmd/api...'
 	go build -ldflags=${linker_flags} -o=./bin/api ./cmd/api
+	GOOS=linux GOARCH=amd64 go build -ldflags=${linker_flags} -o=./bin/linux_amd64/api ./cmd/api
 
 ## run/api: run the cmd/api application
 run/api:
 	go run ./cmd/api -db-dsn=${GREENLIGHT_DB_DSN}
+
+## clean/api: clean the cmd/api application build files
+clean/api:
+	rm -f ./bin/api
+	rm -f ./bin/linux_amd64/api
 
 ## db/psql: connect to the database using psql
 db/psql:
@@ -51,4 +57,4 @@ vendor:
 	@echo 'Vendoring dependencies...'
 	go mod vendor
 
-.PHONY: audit help confirm vendor build/api run/api db/psql db/migrations/new db/migrations/up
+.PHONY: audit help confirm vendor build/api clean/api run/api db/psql db/migrations/new db/migrations/up
