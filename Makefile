@@ -12,18 +12,18 @@ help:
 confirm:
 	@echo 'Are you sure? [y/N] ' && read ans && [ $${ans:-N} = y ]
 
-## build/api: build the cmd/api application
-build/api:
+## api/build: build the cmd/api application
+api/build:
 	@echo 'Building cmd/api...'
 	go build -ldflags=${linker_flags} -o=./bin/api ./cmd/api
 	GOOS=linux GOARCH=amd64 go build -ldflags=${linker_flags} -o=./bin/linux_amd64/api ./cmd/api
 
-## run/api: run the cmd/api application
-run/api:
+## api/run: run the cmd/api application
+api/run:
 	go run ./cmd/api -db-dsn=${GREENLIGHT_DB_DSN}
 
-## clean/api: clean the cmd/api application build files
-clean/api:
+## api/clean: clean the cmd/api application build files
+api/clean:
 	rm -f ./bin/api
 	rm -f ./bin/linux_amd64/api
 
@@ -57,4 +57,4 @@ vendor:
 	@echo 'Vendoring dependencies...'
 	go mod vendor
 
-.PHONY: audit help confirm vendor build/api clean/api run/api db/psql db/migrations/new db/migrations/up
+.PHONY: api/build api/clean api/run db/psql db/migrations/new db/migrations/up audit help confirm vendor
