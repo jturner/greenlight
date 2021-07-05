@@ -22,6 +22,10 @@ api/build:
 api/run:
 	go run ./cmd/api -db-dsn=${GREENLIGHT_DB_DSN}
 
+## api/run/bin: run the binary cmd/api application
+api/run/bin: api/build
+	./bin/api -db-dsn=${GREENLIGHT_DB_DSN}
+
 ## api/clean: clean the cmd/api application build files
 api/clean:
 	rm -f ./bin/api
