@@ -61,4 +61,4 @@ vendor:
 	@echo 'Vendoring dependencies...'
 	go mod vendor
 
-.PHONY: api/build api/clean api/run db/psql db/migrations/new db/migrations/up audit help confirm vendor
+.PHONY: api/build api/clean api/run api/run/bin db/psql db/migrations/new db/migrations/up audit help confirm vendor
