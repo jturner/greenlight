@@ -1,5 +1,7 @@
 include .envrc
 
+SHELL = /bin/bash
+
 current_time = $(shell date +%Y-%m-%dT%H:%M:%S%z)
 git_description = $(shell git describe --always --dirty --tags --long)
 linker_flags = '-s -X main.buildTime=${current_time} -X main.version=${git_description}'
@@ -10,7 +12,7 @@ help:
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/ /'
 
 confirm:
-	@echo 'Are you sure? [y/N] ' && read ans && [ $${ans:-N} = y ]
+	@echo -n 'Are you sure? [y/N] ' && read ans && [ $${ans:-N} = y ]
 
 ## api/build: build the cmd/api application
 api/build:
@@ -27,7 +29,7 @@ api/run/bin: api/build
 	./bin/api -db-dsn=${GREENLIGHT_DB_DSN}
 
 ## api/clean: clean the cmd/api application build files
-api/clean:
+api/clean: confirm
 	rm -f ./bin/api
 	rm -f ./bin/linux_amd64/api
 
