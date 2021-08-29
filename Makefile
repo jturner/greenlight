@@ -2,9 +2,9 @@ include .envrc
 
 SHELL = /bin/bash
 
-current_time = $(shell date +%Y-%m-%dT%H:%M:%S%z)
-git_description = $(shell git describe --always --dirty --tags --long)
-linker_flags = '-s -X main.buildTime=${current_time} -X main.version=${git_description}'
+current_time = `date +%Y-%m-%dT%H:%M:%S%z`
+git_description = `git describe --always --dirty --tags --long`
+linker_flags = "-s -X main.buildTime=${current_time} -X main.version=${git_description}"
 
 ## help: print this help message
 help:
