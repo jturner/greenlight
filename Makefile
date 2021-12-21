@@ -47,6 +47,7 @@ db/migrations/up: confirm
 	@echo 'Running up migrations...'
 	migrate -path ./migrations -database ${GREENLIGHT_DB_DSN} up
 
+## audit: run formatting, vetting and tests
 audit: vendor
 	@echo 'Formatting code...'
 	go fmt ./...
