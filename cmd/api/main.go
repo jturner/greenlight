@@ -78,7 +78,7 @@ func main() {
 	flag.StringVar(&cfg.smtp.password, "smtp-password", "d325911d9fd8ea", "SMTP password")
 	flag.StringVar(&cfg.smtp.sender, "smtp-sender", "Greenlight <no-reply@greenlight.calminferno.net>", "SMTP sender")
 
-	flag.Func("cors-trusted-origins", "Trusted CORS origins (space separated", func(val string) error {
+	flag.Func("cors-trusted-origins", "Trusted CORS origins (space separated)", func(val string) error {
 		cfg.cors.trustedOrigins = strings.Fields(val)
 		return nil
 	})
