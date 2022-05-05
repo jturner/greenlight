@@ -17,7 +17,8 @@ func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, st
 
 	err := app.writeJSON(w, status, env, nil)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		app.logError(r, err)
+		w.WriteHeader(500)
 	}
 }
 
@@ -69,7 +70,7 @@ func (app *application) invalidAuthenticationTokenResponse(w http.ResponseWriter
 }
 
 func (app *application) authenticationRequiredResponse(w http.ResponseWriter, r *http.Request) {
-	message := "you must be authenticated to access this resouce"
+	message := "you must be authenticated to access this resource"
 	app.errorResponse(w, r, http.StatusUnauthorized, message)
 }
 

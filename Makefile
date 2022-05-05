@@ -2,10 +2,6 @@ include .envrc
 
 SHELL = /bin/bash
 
-current_time = `date +%Y-%m-%dT%H:%M:%S%z`
-git_description = `git describe --always --dirty --tags --long`
-linker_flags = "-s -X main.buildTime=${current_time} -X main.version=${git_description}"
-
 ## help: print this help message
 help:
 	@echo 'Usage:'
@@ -17,8 +13,8 @@ confirm:
 ## api/build: build the cmd/api application
 api/build:
 	@echo 'Building cmd/api...'
-	go build -ldflags=${linker_flags} -o=./bin/api ./cmd/api
-	GOOS=linux GOARCH=amd64 go build -ldflags=${linker_flags} -o=./bin/linux_amd64/api ./cmd/api
+	go build -ldflags="-s" -o=./bin/api ./cmd/api
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s" -o=./bin/linux_amd64/api ./cmd/api
 
 ## api/run: run the cmd/api application
 api/run:

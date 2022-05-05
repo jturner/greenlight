@@ -175,7 +175,7 @@ func (m MovieModel) Delete(id int64) error {
 
 	result, err := m.DB.ExecContext(ctx, query, id)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	rowsAffected, err := result.RowsAffected()

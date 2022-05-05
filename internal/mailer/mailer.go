@@ -3,7 +3,7 @@ package mailer
 import (
 	"bytes"
 	"embed"
-	"text/template"
+	"html/template"
 	"time"
 
 	"github.com/go-mail/mail/v2"
