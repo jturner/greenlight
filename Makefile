@@ -14,7 +14,9 @@ confirm:
 api/build:
 	@echo 'Building cmd/api...'
 	go build -ldflags="-s" -o=./bin/api ./cmd/api
+	GOOS=darwinobj GOARCH=amd64 go build -ldflags="-s" -o=./bin/darwin_amd64/api ./cmd/api
 	GOOS=linux GOARCH=amd64 go build -ldflags="-s" -o=./bin/linux_amd64/api ./cmd/api
+	GOOS=linux GOARCH=arm64 go build -ldflags="-s" -o=./bin/linux_arm64/api ./cmd/api
 
 ## api/run: run the cmd/api application
 api/run:
@@ -26,8 +28,7 @@ api/run/bin: api/build
 
 ## api/clean: clean the cmd/api application build files
 api/clean: confirm
-	rm -f ./bin/api
-	rm -f ./bin/linux_amd64/api
+	rm -rf ./bin/*
 
 ## db/psql: connect to the database using psql
 db/psql:
