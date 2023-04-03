@@ -216,7 +216,7 @@ func (mw *metricsResponseWriter) Header() http.Header {
 }
 
 func (mw *metricsResponseWriter) WriteHeader(statusCode int) {
-	mw.WriteHeader(statusCode)
+	mw.wrapped.WriteHeader(statusCode)
 
 	if !mw.headerWritten {
 		mw.statusCode = statusCode
