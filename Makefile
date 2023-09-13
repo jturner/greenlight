@@ -44,13 +44,15 @@ db/migrations/up: confirm
 	@echo 'Running up migrations...'
 	migrate -path ./migrations -database ${GREENLIGHT_DB_DSN} up
 
-## audit: run formatting, vetting and tests
+## audit: run formatting, vetting, vuln and tests
 audit: vendor
 	@echo 'Formatting code...'
 	go fmt ./...
 	@echo 'Vetting code...'
 	go vet ./...
 	staticcheck ./...
+	@echo 'Checking for vulns...'
+	govulncheck ./...
 	@echo 'Running tests...'
 	go test -race -vet=off ./...
 

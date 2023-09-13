@@ -225,16 +225,20 @@ func (mw *metricsResponseWriter) WriteHeader(statusCode int) {
 }
 
 func (mw *metricsResponseWriter) Write(b []byte) (int, error) {
-	if !mw.headerWritten {
-		mw.statusCode = http.StatusOK
-		mw.headerWritten = true
-	}
+	mw.headerWritten = true
 
 	return mw.wrapped.Write(b)
 }
 
 func (mw *metricsResponseWriter) Unwrap() http.ResponseWriter {
 	return mw.wrapped
+}
+
+func newMetricsResponseWriter(w http.ResponseWriter) *metricsResponseWriter {
+	return &metricsResponseWriter{
+		wrapped:    w,
+		statusCode: http.StatusOK,
+	}
 }
 
 func (app *application) metrics(next http.Handler) http.Handler {
@@ -250,7 +254,7 @@ func (app *application) metrics(next http.Handler) http.Handler {
 
 		totalRequestsReceived.Add(1)
 
-		mw := &metricsResponseWriter{wrapped: w}
+		mw := newMetricsResponseWriter(w)
 		next.ServeHTTP(mw, r)
 
 		totalResponsesSent.Add(1)

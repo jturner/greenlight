@@ -53,7 +53,7 @@ func (app *application) createAuthenticationTokenHandler(w http.ResponseWriter, 
 		return
 	}
 
-	token, err := app.models.Tokens.New(user.ID, 24*time.Hour, data.ScopeAuthentication)
+	token, err := app.models.Tokens.New(user.ID, 3*24*time.Hour, data.ScopeAuthentication)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -114,7 +114,7 @@ func (app *application) createActivationTokenHandler(w http.ResponseWriter, r *h
 
 		err := app.mailer.Send(user.Email, "token_activation.tmpl", data)
 		if err != nil {
-			app.logger.PrintError(err, nil)
+			app.logger.Error(err.Error())
 		}
 	})
 
@@ -162,7 +162,7 @@ func (app *application) createPasswordResetTokenHandler(w http.ResponseWriter, r
 		return
 	}
 
-	token, err := app.models.Tokens.New(user.ID, 45*time.Minute, data.ScopePasswordReset)
+	token, err := app.models.Tokens.New(user.ID, 3*24*time.Hour, data.ScopePasswordReset)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -175,7 +175,7 @@ func (app *application) createPasswordResetTokenHandler(w http.ResponseWriter, r
 
 		err = app.mailer.Send(user.Email, "token_password_reset.tmpl", data)
 		if err != nil {
-			app.logger.PrintError(err, nil)
+			app.logger.Error(err.Error())
 		}
 	})
 
