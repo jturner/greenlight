@@ -13,10 +13,10 @@ confirm:
 ## api/build: build the cmd/api application
 api/build:
 	@echo 'Building cmd/api...'
-	go build -ldflags="-s" -o=./bin/api ./cmd/api
-	GOOS=darwin GOARCH=amd64 go build -ldflags="-s" -o=./bin/darwin_amd64/api ./cmd/api
-	GOOS=linux GOARCH=amd64 go build -ldflags="-s" -o=./bin/linux_amd64/api ./cmd/api
-	GOOS=linux GOARCH=arm64 go build -ldflags="-s" -o=./bin/linux_arm64/api ./cmd/api
+	go build -ldflags="-s -w" -o=./bin/api ./cmd/api
+	GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o=./bin/darwin_amd64/api ./cmd/api
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o=./bin/linux_amd64/api ./cmd/api
+	GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o=./bin/linux_arm64/api ./cmd/api
 
 ## api/run: run the cmd/api application
 api/run:
@@ -44,10 +44,11 @@ db/migrations/up: confirm
 	@echo 'Running up migrations...'
 	migrate -path ./migrations -database ${GREENLIGHT_DB_DSN} up
 
-## audit: run formatting, vetting, vuln and tests
-audit: vendor
-	@echo 'Formatting code...'
-	go fmt ./...
+## audit: run quality control checks
+audit:
+	@echo 'Checking module dependencies'
+	go mod tidy -diff
+	go mod verify
 	@echo 'Vetting code...'
 	go vet ./...
 	staticcheck ./...
@@ -56,11 +57,14 @@ audit: vendor
 	@echo 'Running tests...'
 	go test -race -vet=off ./...
 
-vendor:
-	@echo 'Tidying and verifying module dependencies...'
+## tidy: format code, and tidy and vendor module dependencies
+tidy:
+	@echo 'Formatting code...'
+	go fmt ./...
+	@echo 'Tidying module dependencies...'
 	go mod tidy
+	@echo 'Verifying and vendoring module dependencies...'
 	go mod verify
-	@echo 'Vendoring dependencies...'
 	go mod vendor
 
-.PHONY: api/build api/clean api/run api/run/bin db/psql db/migrations/new db/migrations/up audit help confirm vendor
+.PHONY: api/build api/clean api/run api/run/bin db/psql db/migrations/new db/migrations/up audit help confirm tidy

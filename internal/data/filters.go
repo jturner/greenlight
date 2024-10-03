@@ -1,7 +1,6 @@
 package data
 
 import (
-	"math"
 	"strings"
 
 	"greenlight.calminferno.net/internal/validator"
@@ -57,7 +56,7 @@ func calculateMetadata(totalRecords, page, pageSize int) Metadata {
 		CurrentPage:  page,
 		PageSize:     pageSize,
 		FirstPage:    1,
-		LastPage:     int(math.Ceil(float64(totalRecords) / float64(pageSize))),
+		LastPage:     (totalRecords + pageSize - 1) / pageSize,
 		TotalRecords: totalRecords,
 	}
 }
